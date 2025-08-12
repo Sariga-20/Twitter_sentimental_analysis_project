@@ -12,9 +12,18 @@ venv/
 
 # VS Code settings
 .vscode/
+
 # Logs
 *.log
 
 # OS files
 .DS_Store
 Thumbs.db
+
+# Model files (comment out if you want to push them to GitHub)
+*.pkl
+*.h5
+*.keras
+
+# Model folder
+saved_models/
