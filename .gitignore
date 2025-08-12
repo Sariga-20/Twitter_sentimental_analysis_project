@@ -12,12 +12,6 @@ venv/
 
 # VS Code settings
 .vscode/
-
-# Model files
-*.pkl
-*.h5
-*.keras
-
 # Logs
 *.log
 
