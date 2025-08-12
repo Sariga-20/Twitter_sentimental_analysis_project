@@ -26,7 +26,7 @@ This repository contains an end-to-end Twitter sentiment analysis system utilizi
 
 1. **Clone the repository**
 
-git clone
+git clone https://github.com/Sariga-20/Twitter_sentimental_analysis_project.git
 
 
 2. **Install dependencies**
