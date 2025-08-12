@@ -84,14 +84,26 @@ st.markdown('<div class="title">🐦 Twitter Sentiment Analysis</div>', unsafe_a
 st.markdown('<div class="subtitle">Analyze tweets with Logistic Regression & LSTM Neural Network</div>', unsafe_allow_html=True)
 
 # =========================
-# Input Section
+# Mixed Phrase Detector
 # =========================
-st.markdown("---")
-tweet = st.text_area("✏️ Enter a tweet or text to analyze sentiment:", placeholder="Type your tweet here...")
+def has_mixed_sentiment(text):
+    positive_cues = ["good", "great", "love", "like", "amazing", "excellent", "awesome"]
+    negative_cues = ["bad", "hate", "terrible", "awful", "poor", "worst"]
+    connectors = ["but", "however", "although", "though"]
 
-if st.button("Analyze Sentiment"):
+    t = text.lower()
+    return (
+        any(conn in t for conn in connectors)
+        and any(p in t for p in positive_cues)
+        and any(n in t for n in negative_cues)
+    )
+
+# =========================
+# Main Analysis Button Logic
+# =========================
+if st.button("🚀 Analyze Sentiment"):
     if tweet.strip() == "":
-        st.warning("Please enter some text to analyze.")
+        st.warning("⚠️ Please enter some text to analyze.")
     else:
         # Predictions
         pred_lr, prob_lr = predict_logreg(tweet)
@@ -99,25 +111,28 @@ if st.button("Analyze Sentiment"):
 
         col1, col2 = st.columns(2)
 
+        # Logistic Regression Output
         with col1:
             st.markdown("### 📊 Logistic Regression")
-            if 0.4 <= prob_lr <= 0.6:
+            if has_mixed_sentiment(tweet) or (0.4 <= prob_lr <= 0.6):
                 st.info(f"🙂 Neutral / Mixed ({prob_lr:.2%} confidence)")
             elif pred_lr == 1:
                 st.success(f"Positive 😀 ({prob_lr:.2%} confidence)")
             else:
                 st.error(f"Negative 😠 ({prob_lr:.2%} confidence)")
 
+        # LSTM Neural Network Output
         with col2:
             st.markdown("### 🤖 LSTM Neural Network")
-            if 0.4 <= prob_dl <= 0.6:
+            if has_mixed_sentiment(tweet) or (0.4 <= prob_dl <= 0.6):
                 st.info(f"🙂 Neutral / Mixed ({prob_dl:.2%} confidence)")
             elif pred_dl == 1:
                 st.success(f"Positive 😀 ({prob_dl:.2%} confidence)")
             else:
                 st.error(f"Negative 😠 ({(1-prob_dl):.2%} confidence)")
-st.markdown("---")
-st.info("✅ Works best on English tweets and casual language.\n💡 Avoid very short or neutral text for better accuracy.")
+
+        st.markdown("---")
+        st.info("✅ Works best on English tweets. Mixed detection is based on probability and detected contrast words.")
 
 # =========================
 # Creative Footer with Branding
@@ -126,10 +141,10 @@ st.markdown(
     """
     <style>
         .footer {
-            font-size: 14px;
+            font-size: 20px;
             color: #888;
             text-align: center;
-            padding-top: 15px;
+            padding-top: 20px;
         }
         .name {
             font-weight: bold;
