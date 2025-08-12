@@ -89,32 +89,35 @@ st.markdown('<div class="subtitle">Analyze tweets with Logistic Regression & LST
 st.markdown("---")
 tweet = st.text_area("✏️ Enter a tweet or text to analyze sentiment:", placeholder="Type your tweet here...")
 
-if st.button("🚀 Analyze Sentiment"):
+if st.button("Analyze Sentiment"):
     if tweet.strip() == "":
-        st.warning("⚠️ Please enter some text to analyze.")
+        st.warning("Please enter some text to analyze.")
     else:
+        # Predictions
         pred_lr, prob_lr = predict_logreg(tweet)
         pred_dl, prob_dl = predict_lstm(tweet)
 
-        st.markdown("### 📊 Sentiment Results")
         col1, col2 = st.columns(2)
 
         with col1:
-            st.markdown("#### Logistic Regression (TF-IDF)")
-            if pred_lr == 1:
-                st.success(f"😀 Positive — Confidence: {prob_lr:.2%}")
+            st.markdown("### 📊 Logistic Regression")
+            if 0.4 <= prob_lr <= 0.6:
+                st.info(f"🙂 Neutral / Mixed ({prob_lr:.2%} confidence)")
+            elif pred_lr == 1:
+                st.success(f"Positive 😀 ({prob_lr:.2%} confidence)")
             else:
-                st.error(f"😠 Negative — Confidence: {prob_lr:.2%}")
+                st.error(f"Negative 😠 ({prob_lr:.2%} confidence)")
 
         with col2:
-            st.markdown("#### LSTM Neural Network")
-            if pred_dl == 1:
-                st.success(f"😀 Positive — Confidence: {prob_dl:.2%}")
+            st.markdown("### 🤖 LSTM Neural Network")
+            if 0.4 <= prob_dl <= 0.6:
+                st.info(f"🙂 Neutral / Mixed ({prob_dl:.2%} confidence)")
+            elif pred_dl == 1:
+                st.success(f"Positive 😀 ({prob_dl:.2%} confidence)")
             else:
-                st.error(f"😠 Negative — Confidence: {(1-prob_dl):.2%}")
-
-        st.markdown("---")
-        st.info("✅ Works best on English tweets and casual language.\n💡 Avoid very short or neutral text for better accuracy.")
+                st.error(f"Negative 😠 ({(1-prob_dl):.2%} confidence)")
+st.markdown("---")
+st.info("✅ Works best on English tweets and casual language.\n💡 Avoid very short or neutral text for better accuracy.")
 
 # =========================
 # Creative Footer with Branding
