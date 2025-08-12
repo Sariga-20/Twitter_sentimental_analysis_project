@@ -35,7 +35,7 @@ logreg, vectorizer, lstm_model, tokenizer = load_models()
 MAX_LEN = 50
 
 def clean_text(text):
-    """Lowercase, remove URLs, mentions, hashtags, special chars."""
+    """Lowercase, remove URLs, mentions, hashtags, and special chars."""
     text = text.lower()
     text = re.sub(r"http\S+", "", text)
     text = re.sub(r"@\w+", "", text)
@@ -59,26 +59,23 @@ def predict_lstm(text):
     return pred, prob
 
 # =========================
-# Header
+# Header Styling
 # =========================
-st.markdown(
-    """
-    <style>
-        .title {
-            font-size: 40px;
-            font-weight: bold;
-            color: #1DA1F2;
-            text-align: center;
-        }
-        .subtitle {
-            text-align: center;
-            font-size: 18px;
-            color: #444;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+st.markdown("""
+<style>
+    .title {
+        font-size: 40px;
+        font-weight: bold;
+        color: #1DA1F2;
+        text-align: center;
+    }
+    .subtitle {
+        text-align: center;
+        font-size: 18px;
+        color: #444;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 st.markdown('<div class="title">🐦 Twitter Sentiment Analysis</div>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">Analyze tweets with Logistic Regression & LSTM Neural Network</div>', unsafe_allow_html=True)
@@ -93,10 +90,18 @@ def has_mixed_sentiment(text):
 
     t = text.lower()
     return (
-        any(conn in t for conn in connectors)
-        and any(p in t for p in positive_cues)
-        and any(n in t for n in negative_cues)
+        any(conn in t for conn in connectors) and
+        any(p in t for p in positive_cues) and
+        any(n in t for n in negative_cues)
     )
+
+# =========================
+# Input Section
+# =========================
+tweet = st.text_area(
+    "✏️ Enter a tweet or text to analyze sentiment:",
+    placeholder="Type your tweet here..."
+)
 
 # =========================
 # Main Analysis Button Logic
@@ -105,7 +110,7 @@ if st.button("🚀 Analyze Sentiment"):
     if tweet.strip() == "":
         st.warning("⚠️ Please enter some text to analyze.")
     else:
-        # Predictions
+        # Model Predictions
         pred_lr, prob_lr = predict_logreg(tweet)
         pred_dl, prob_dl = predict_lstm(tweet)
 
@@ -129,34 +134,30 @@ if st.button("🚀 Analyze Sentiment"):
             elif pred_dl == 1:
                 st.success(f"Positive 😀 ({prob_dl:.2%} confidence)")
             else:
-                st.error(f"Negative 😠 ({(1-prob_dl):.2%} confidence)")
+                st.error(f"Negative 😠 ({(1 - prob_dl):.2%} confidence)")
 
         st.markdown("---")
-        st.info("✅ Works best on English tweets. Mixed detection is based on probability and detected contrast words.")
+        st.info("✅ Works best on English tweets. Mixed detection is based on probability and contrast keywords.")
 
 # =========================
 # Creative Footer with Branding
 # =========================
-st.markdown(
-    """
-    <style>
-        .footer {
-            font-size: 20px;
-            color: #888;
-            text-align: center;
-            padding-top: 20px;
-        }
-        .name {
-            font-weight: bold;
-            color: #ff4b1f;
-        }
-    </style>
-    <hr>
-    <div class="footer">
-        Made with ❤️ using Streamlit, Scikit-learn & TensorFlow<br>
-        Developed by <span class="name">Sariga</span> 🚀
-    </div>
-    """,
-    unsafe_allow_html=True
-)
-
+st.markdown("""
+<style>
+    .footer {
+        font-size: 16px;
+        color: #888;
+        text-align: center;
+        padding-top: 20px;
+    }
+    .name {
+        font-weight: bold;
+        color: #ff4b1f;
+    }
+</style>
+<hr>
+<div class="footer">
+    Made with ❤️ using Streamlit, Scikit-learn & TensorFlow<br>
+    Developed by <span class="name">Sariga</span> 🚀
+</div>
+""", unsafe_allow_html=True)
