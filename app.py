@@ -10,9 +10,9 @@ import re
 # =========================
 @st.cache_resource
 def load_models():
-    logreg = joblib.load("logreg_model.pkl")
+    logreg = joblib.load("best_logreg_model.pkl")
     vectorizer = joblib.load("vectorizer.pkl")
-    lstm_model = load_model("lstm_sentiment_model.h5")
+    lstm_model = load_model("lstm_sentiment_model.keras")
     tokenizer = joblib.load("tokenizer.pkl")
     return logreg, vectorizer, lstm_model, tokenizer
 
