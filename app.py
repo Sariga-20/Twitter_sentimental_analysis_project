@@ -11,7 +11,7 @@ import re
 @st.cache_resource
 def load_models():
     logreg = joblib.load("saved_models/best_logreg_model.pkl")
-    vectorizer = joblib.load("saved_models/vectorizer.pkl")
+    vectorizer = joblib.load("saved_models/tfidf_vectorizer.pkl")
     lstm_model = load_model("saved_models/lstm_sentiment_model.keras")  
     tokenizer = joblib.load("saved_models/tokenizer.pkl")
 
